@@ -37,7 +37,10 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 async function handleEvent(event) {
-  if (event.type !== 'message' || event.message.type !== 'text') {
+  if (event.type == 'message' || event.message.type == 'text' || event.message.text.startsWith('@Jarvis Bot ')) {
+    // use reply API
+    return client.replyMessage(event.replyToken, echo);
+  } else {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
@@ -50,11 +53,6 @@ async function handleEvent(event) {
 
   // create a echoing text message
   const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
-  
-  // use reply API
-  if (event.message.text == '@Jarvis Bot ' + event.message.text){
-    return client.replyMessage(event.replyToken, echo);
-  }
 }
 
 // listen on port
