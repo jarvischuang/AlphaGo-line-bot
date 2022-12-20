@@ -49,8 +49,9 @@ async function handleEvent(event) {
   });
 
   // create a echoing text message
-  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
-
+  if (event.message.text=="@Jarvisbot " + event.message.text){
+    const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+  }
   // use reply API
   return client.replyMessage(event.replyToken, echo);
 }
