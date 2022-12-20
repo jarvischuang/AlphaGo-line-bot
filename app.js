@@ -37,22 +37,21 @@ app.post('/callback', line.middleware(config), (req, res) => {
 
 // event handler
 async function handleEvent(event) {
-  if (event.type == 'message' || event.message.type == 'text' || event.message.text.startsWith('@Jarvis Bot ')) {
+  const completion = await openai.createCompletion({
+    model: "text-davinci-003",
+    prompt: event.message.text ,
+    max_tokens: 1000,
+  });
+  // create a echoing text message
+  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+
+  if (event.message.text.startsWith('@Jarvis Bot ')) {
     // use reply API
     return client.replyMessage(event.replyToken, echo);
   } else {
     // ignore non-text-message event
     return Promise.resolve(null);
   }
-
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: event.message.text ,
-    max_tokens: 1000,
-  });
-
-  // create a echoing text message
-  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
 }
 
 // listen on port
