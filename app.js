@@ -49,11 +49,12 @@ async function handleEvent(event) {
   });
 
   // create a echoing text message
-  if (event.message.text=="@Jarvisbot " + event.message.text){
-    const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
-  }
+  const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
+  
   // use reply API
-  return client.replyMessage(event.replyToken, echo);
+  if (event.message.text == '@Jarvis Bot ' + event.message.text){
+    return client.replyMessage(event.replyToken, echo);
+  }
 }
 
 // listen on port
