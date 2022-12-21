@@ -45,7 +45,7 @@ async function handleEvent(event) {
   // create a echoing text message
   const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
 
-  if (event.message.text.startsWith('@Jarvis Bot ')) {
+  if (event.message.text.toLowerCase().startsWith('@jarvis bot ')) {
     // use reply API
     return client.replyMessage(event.replyToken, echo);
   } else {
