@@ -3,12 +3,12 @@ require('dotenv').config();
 const express = require('express');
 const line = require('@line/bot-sdk');
 const { Configuration, OpenAIApi } = require("openai");
+const fs = require('fs');
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
-
 
 // create LINE SDK config from env variables
 const config = {
@@ -46,6 +46,12 @@ async function handleEvent(event) {
   const echo = { type: 'text', text: completion.data.choices[0].text.trim() };
 
   if (event.message.text.toLowerCase().startsWith('@jarvis bot ')) {
+    // writeFile
+    const data = JSON.stringify(event.message);
+    fs.writeFile('received_message.json', data, (err) => {
+      if (err) throw err;
+      console.log('The file has been saved!');
+    });
     // use reply API
     return client.replyMessage(event.replyToken, echo);
   } else {
